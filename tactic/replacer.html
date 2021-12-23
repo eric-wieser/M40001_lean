@@ -1,0 +1,2841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://eric-wieser.github.io/M40001_lean/style.css">
+    <link rel="stylesheet" href="https://eric-wieser.github.io/M40001_lean/pygments.css">
+    <link rel="shortcut icon" href="https://eric-wieser.github.io/M40001_lean/favicon.ico">
+    <title>tactic.replacer - mathlib docs</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="`def_replacer`. A mechanism for defining tactics for use in auto params, whose meaning is defined incrementally through attributes." />
+    
+    <link rel="canonical" href="https://leanprover-community.github.io/mathlib_docs/tactic/replacer.html" />
+    
+    <meta name="og:title" content="tactic.replacer - mathlib docs">
+    <meta name="og:site_name" content="mathlib for Lean - API documentation">
+    <meta name="og:description" content="`def_replacer`. A mechanism for defining tactics for use in auto params, whose meaning is defined incrementally through attributes.">
+    <meta name="og:image" content="https://eric-wieser.github.io/M40001_lean/meta-og.png">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="tactic.replacer - mathlib docs">
+    <meta name="twitter:description" content="`def_replacer`. A mechanism for defining tactics for use in auto params, whose meaning is defined incrementally through attributes.">
+    <meta name="twitter:image" content="https://eric-wieser.github.io/M40001_lean/meta-twitter.png">
+</head>
+
+<body>
+
+<input id="nav_toggle" type="checkbox">
+
+<header>
+    <h1><label for="nav_toggle"></label><a href="https://leanprover-community.github.io">mathlib</a>
+        <span>documentation</span></h1>
+    <p class="header_filename break_within"><span class="name">tactic</span>.<span class="name">replacer</span></p>
+    <form action="https://google.com/search" method="get" id="search_form">
+        <input type="hidden" name="sitesearch" value="https://leanprover-community.github.io/mathlib_docs">
+        <input type="text" name="q" autocomplete="off">
+        <button>Google site search</button>
+    </form>
+</header>
+
+<nav class="internal_nav">
+<h3><a class="break_within" href="#top"><span class="name">tactic</span>.<span class="name">replacer</span></a></h3>
+
+<p class="gh_nav_link"><a href="https://github.com/leanprover-community/mathlib/blob/master/src/tactic/replacer.lean">source</a></p>
+
+<div class="imports">
+    <details>
+        <summary>Imports</summary>
+        <ul>
+            <li><a href="https://eric-wieser.github.io/M40001_lean/init/default.html">
+                init.default</a></li>
+        
+            <li><a href="https://eric-wieser.github.io/M40001_lean/tactic/core.html">
+                tactic.core</a></li>
+        </ul>
+    </details>
+    <details>
+        <summary>Imported by</summary>
+        <ul>
+            <li><a href="https://eric-wieser.github.io/M40001_lean/tactic/obviously.html">
+                tactic.obviously</a></li>
+        </ul>
+    </details>
+</div>
+
+
+    <div class="nav_link"><a class="break_within" href="#tactic.def_replacer"><span class="name">tactic</span>.<span class="name">def_replacer</span></a></div>
+
+    <div class="nav_link"><a class="break_within" href="#tactic.def_replacer_cmd"><span class="name">tactic</span>.<span class="name">def_replacer_cmd</span></a></div>
+
+    <div class="nav_link"><a class="break_within" href="#tactic.mk_replacer"><span class="name">tactic</span>.<span class="name">mk_replacer</span></a></div>
+
+    <div class="nav_link"><a class="break_within" href="#tactic.mk_replacer₁"><span class="name">tactic</span>.<span class="name">mk_replacer₁</span></a></div>
+
+    <div class="nav_link"><a class="break_within" href="#tactic.mk_replacer₂"><span class="name">tactic</span>.<span class="name">mk_replacer₂</span></a></div>
+
+    <div class="nav_link"><a class="break_within" href="#tactic.replaceable_attr"><span class="name">tactic</span>.<span class="name">replaceable_attr</span></a></div>
+
+    <div class="nav_link"><a class="break_within" href="#tactic.replacer"><span class="name">tactic</span>.<span class="name">replacer</span></a></div>
+
+    <div class="nav_link"><a class="break_within" href="#tactic.replacer_attr"><span class="name">tactic</span>.<span class="name">replacer_attr</span></a></div>
+
+    <div class="nav_link"><a class="break_within" href="#tactic.replacer_core"><span class="name">tactic</span>.<span class="name">replacer_core</span></a></div>
+
+    <div class="nav_link"><a class="break_within" href="#tactic.unprime"><span class="name">tactic</span>.<span class="name">unprime</span></a></div>
+
+    <div class="nav_link"><a class="break_within" href="#tactic.valid_types"><span class="name">tactic</span>.<span class="name">valid_types</span></a></div>
+
+</nav>
+
+<main>
+    <a id="top"></a>
+    
+
+    
+        <div class="mod_doc">
+            <h1 id="codedef_replacercode" class="markdown-heading"><code>def_replacer</code> <a class="hover-link" href="#codedef_replacercode">#</a></h1>
+<p>A mechanism for defining tactics for use in auto params, whose
+meaning is defined incrementally through attributes.</p>
+
+        </div>
+    
+
+    
+        
+        
+<div class="decl" id="tactic.replacer_core">
+<div class="def meta">
+
+<div class="gh_link"><a href="https://github.com/leanprover-community/mathlib/blob/master/src/tactic/replacer.lean#L17">source</a></div>
+
+
+
+<div class="decl_header">
+    
+
+<span class="decl_meta">meta</span>
+<span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="https://eric-wieser.github.io/M40001_lean/tactic/replacer.html#tactic.replacer_core"><span class="name">tactic</span>.<span class="name">replacer_core</span></a></span>
+
+    <span class="impl_arg"><span class="decl_args"><span class="fn">{α : Type}</span></span></span>
+    <span class="impl_arg"><span class="decl_args"><span class="fn">[<a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#reflected">reflected</a> α]</span></span></span>
+    <span class="decl_args"><span class="fn">(ntac : <a href="https://eric-wieser.github.io/M40001_lean/init/meta/name.html#name">name</a>)</span></span>
+    <span class="decl_args"><span class="fn">(eval : Π (β : Type) [_inst_2 : <span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#reflected">reflected</a> β]</span>, <span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#expr">expr</a> → <span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html#tactic">tactic</a> β</span></span>)</span></span>&nbsp;<span class="decl_args">:</span>
+<div class="decl_type"><span class="fn"><span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/core.html#list">list</a> <a href="https://eric-wieser.github.io/M40001_lean/init/meta/name.html#name">name</a></span> → <span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html#tactic">tactic</a> α</span></span></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+    
+
+    
+        
+        
+<div class="decl" id="tactic.replacer">
+<div class="def meta">
+
+<div class="gh_link"><a href="https://github.com/leanprover-community/mathlib/blob/master/src/tactic/replacer.lean#L29">source</a></div>
+
+
+
+<div class="decl_header">
+    
+
+<span class="decl_meta">meta</span>
+<span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="https://eric-wieser.github.io/M40001_lean/tactic/replacer.html#tactic.replacer"><span class="name">tactic</span>.<span class="name">replacer</span></a></span>
+
+    <span class="decl_args"><span class="fn">(ntac : <a href="https://eric-wieser.github.io/M40001_lean/init/meta/name.html#name">name</a>)</span></span>
+    <span class="impl_arg"><span class="decl_args"><span class="fn">{α : Type}</span></span></span>
+    <span class="impl_arg"><span class="decl_args"><span class="fn">[<a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#reflected">reflected</a> α]</span></span></span>
+    <span class="decl_args"><span class="fn">(F : Type → Type)</span></span>
+    <span class="decl_args"><span class="fn">(eF : Π (β : Type), <span class="fn"><span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#reflected">reflected</a> β</span> → <span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#reflected">reflected</a> <span class="fn">(F β)</span></span></span>)</span></span>
+    <span class="decl_args"><span class="fn">(R : Π (β : Type), <span class="fn"><span class="fn">F β</span> → β</span>)</span></span>&nbsp;<span class="decl_args">:</span>
+<div class="decl_type"><span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html#tactic">tactic</a> α</span></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+    
+
+    
+        
+        
+<div class="decl" id="tactic.mk_replacer₁">
+<div class="def meta">
+
+<div class="gh_link"><a href="https://github.com/leanprover-community/mathlib/blob/master/src/tactic/replacer.lean#L35">source</a></div>
+
+
+
+<div class="decl_header">
+    
+
+<span class="decl_meta">meta</span>
+<span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="https://eric-wieser.github.io/M40001_lean/tactic/replacer.html#tactic.mk_replacer₁"><span class="name">tactic</span>.<span class="name">mk_replacer₁</span></a></span>
+&nbsp;<span class="decl_args">:</span>
+<div class="decl_type"><span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#expr">expr</a> → <span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/core.html#nat" title="nat">ℕ</a> → <span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#expr">expr</a> <a href="https://eric-wieser.github.io/M40001_lean/init/core.html#prod" title="prod">×</a> <a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#expr">expr</a></span></span></span></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+    
+
+    
+        
+        
+<div class="decl" id="tactic.mk_replacer₂">
+<div class="def meta">
+
+<div class="gh_link"><a href="https://github.com/leanprover-community/mathlib/blob/master/src/tactic/replacer.lean#L41">source</a></div>
+
+
+
+<div class="decl_header">
+    
+
+<span class="decl_meta">meta</span>
+<span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="https://eric-wieser.github.io/M40001_lean/tactic/replacer.html#tactic.mk_replacer₂"><span class="name">tactic</span>.<span class="name">mk_replacer₂</span></a></span>
+
+    <span class="decl_args"><span class="fn">(ntac : <a href="https://eric-wieser.github.io/M40001_lean/init/meta/name.html#name">name</a>)</span></span>
+    <span class="decl_args"><span class="fn">(v : <a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#expr">expr</a> <a href="https://eric-wieser.github.io/M40001_lean/init/core.html#prod" title="prod">×</a> <a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#expr">expr</a>)</span></span>&nbsp;<span class="decl_args">:</span>
+<div class="decl_type"><span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#expr">expr</a> → <span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/core.html#nat" title="nat">ℕ</a> → <span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/core.html#option">option</a> <a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#expr">expr</a></span></span></span></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+    
+
+    
+        
+        
+<div class="decl" id="tactic.mk_replacer">
+<div class="def meta">
+
+<div class="gh_link"><a href="https://github.com/leanprover-community/mathlib/blob/master/src/tactic/replacer.lean#L57">source</a></div>
+
+
+
+<div class="decl_header">
+    
+
+<span class="decl_meta">meta</span>
+<span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="https://eric-wieser.github.io/M40001_lean/tactic/replacer.html#tactic.mk_replacer"><span class="name">tactic</span>.<span class="name">mk_replacer</span></a></span>
+
+    <span class="decl_args"><span class="fn">(ntac : <a href="https://eric-wieser.github.io/M40001_lean/init/meta/name.html#name">name</a>)</span></span>
+    <span class="decl_args"><span class="fn">(e : <a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#expr">expr</a>)</span></span>&nbsp;<span class="decl_args">:</span>
+<div class="decl_type"><span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html#tactic">tactic</a> <a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#expr">expr</a></span></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+    
+
+    
+        
+        
+<div class="decl" id="tactic.valid_types">
+<div class="def meta">
+
+<div class="gh_link"><a href="https://github.com/leanprover-community/mathlib/blob/master/src/tactic/replacer.lean#L60">source</a></div>
+
+
+
+<div class="decl_header">
+    
+
+<span class="decl_meta">meta</span>
+<span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="https://eric-wieser.github.io/M40001_lean/tactic/replacer.html#tactic.valid_types"><span class="name">tactic</span>.<span class="name">valid_types</span></a></span>
+&nbsp;<span class="decl_args">:</span>
+<div class="decl_type"><span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#expr">expr</a> → <span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/core.html#list">list</a> <a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#expr">expr</a></span></span></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+    
+
+    
+        
+        
+<div class="decl" id="tactic.replacer_attr">
+<div class="def meta">
+
+<div class="gh_link"><a href="https://github.com/leanprover-community/mathlib/blob/master/src/tactic/replacer.lean#L67">source</a></div>
+
+
+
+<div class="decl_header">
+    
+
+<span class="decl_meta">meta</span>
+<span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="https://eric-wieser.github.io/M40001_lean/tactic/replacer.html#tactic.replacer_attr"><span class="name">tactic</span>.<span class="name">replacer_attr</span></a></span>
+
+    <span class="decl_args"><span class="fn">(ntac : <a href="https://eric-wieser.github.io/M40001_lean/init/meta/name.html#name">name</a>)</span></span>&nbsp;<span class="decl_args">:</span>
+<div class="decl_type"><span class="fn"><span class="fn">(<a href="https://eric-wieser.github.io/M40001_lean/init/meta/attribute.html#user_attribute">user_attribute</a> <a href="https://eric-wieser.github.io/M40001_lean/init/core.html#unit">unit</a>)</span></span></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+    
+
+    
+        
+        
+<div class="decl" id="tactic.def_replacer">
+<div class="def meta">
+
+<div class="gh_link"><a href="https://github.com/leanprover-community/mathlib/blob/master/src/tactic/replacer.lean#L82">source</a></div>
+
+
+
+<div class="decl_header">
+    
+
+<span class="decl_meta">meta</span>
+<span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="https://eric-wieser.github.io/M40001_lean/tactic/replacer.html#tactic.def_replacer"><span class="name">tactic</span>.<span class="name">def_replacer</span></a></span>
+
+    <span class="decl_args"><span class="fn">(ntac : <a href="https://eric-wieser.github.io/M40001_lean/init/meta/name.html#name">name</a>)</span></span>
+    <span class="decl_args"><span class="fn">(ty : <a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html#expr">expr</a>)</span></span>&nbsp;<span class="decl_args">:</span>
+<div class="decl_type"><span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html#tactic">tactic</a> <a href="https://eric-wieser.github.io/M40001_lean/init/core.html#unit">unit</a></span></div>
+</div>
+
+
+
+
+
+<p>Define a new replaceable tactic.</p>
+
+
+
+
+
+
+
+</div>
+</div>
+    
+
+    
+        
+        
+<div class="decl" id="tactic.def_replacer_cmd">
+<div class="def meta">
+
+<div class="gh_link"><a href="https://github.com/leanprover-community/mathlib/blob/master/src/tactic/replacer.lean#L112">source</a></div>
+
+
+
+<div class="decl_header">
+    
+
+<span class="decl_meta">meta</span>
+<span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="https://eric-wieser.github.io/M40001_lean/tactic/replacer.html#tactic.def_replacer_cmd"><span class="name">tactic</span>.<span class="name">def_replacer_cmd</span></a></span>
+
+    <span class="decl_args"><span class="fn">(_x : <a href="https://eric-wieser.github.io/M40001_lean/init/meta/interactive_base.html#interactive.parse">interactive.parse</a> <span class="fn">(<a href="https://eric-wieser.github.io/M40001_lean/init/meta/lean/parser.html#lean.parser.tk">lean.parser.tk</a> "def_replacer")</span>)</span></span>&nbsp;<span class="decl_args">:</span>
+<div class="decl_type"><span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/meta/lean/parser.html#lean.parser">lean.parser</a> <a href="https://eric-wieser.github.io/M40001_lean/init/core.html#unit">unit</a></span></div>
+</div>
+
+
+
+
+
+<p><code>def_replacer foo</code> sets up a stub definition <code>foo : <a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html#tactic">tactic</a> <a href="https://eric-wieser.github.io/M40001_lean/init/core.html#unit">unit</a></code>, which can
+effectively be defined and re-defined later, by tagging definitions with <code>@[foo]</code>.</p>
+<ul>
+<li><code>@[foo] meta def foo_1 : <a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html#tactic">tactic</a> <a href="https://eric-wieser.github.io/M40001_lean/init/core.html#unit">unit</a> := ...</code> replaces the current definition of <code>foo</code>.</li>
+<li><code>@[foo] meta def foo_2 (old : <a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html#tactic">tactic</a> <a href="https://eric-wieser.github.io/M40001_lean/init/core.html#unit">unit</a>) : <a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html#tactic">tactic</a> <a href="https://eric-wieser.github.io/M40001_lean/init/core.html#unit">unit</a> := ...</code> replaces the current
+definition of <code>foo</code>, and provides access to the previous definition via <code>old</code>.
+(The argument can also be an <code><a href="https://eric-wieser.github.io/M40001_lean/init/core.html#option">option</a> (<a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html#tactic">tactic</a> <a href="https://eric-wieser.github.io/M40001_lean/init/core.html#unit">unit</a>)</code>, which is provided as <code>none</code> if
+this is the first definition tagged with <code>@[foo]</code> since <code>def_replacer</code> was invoked.)</li>
+</ul>
+<p><code>def_replacer foo : α → β → <a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html#tactic">tactic</a> γ</code> allows the specification of a replacer with
+custom input and output types. In this case all subsequent redefinitions must have the
+same type, or the type <code>α → β → <a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html#tactic">tactic</a> γ → <a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html#tactic">tactic</a> γ</code> or
+<code>α → β → <a href="https://eric-wieser.github.io/M40001_lean/init/core.html#option">option</a> (<a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html#tactic">tactic</a> γ) → <a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html#tactic">tactic</a> γ</code> analogously to the previous cases.</p>
+
+
+
+
+
+
+
+</div>
+</div>
+    
+
+    
+        
+        
+<div class="decl" id="tactic.unprime">
+<div class="def meta">
+
+<div class="gh_link"><a href="https://github.com/leanprover-community/mathlib/blob/master/src/tactic/replacer.lean#L126">source</a></div>
+
+
+
+<div class="decl_header">
+    
+
+<span class="decl_meta">meta</span>
+<span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="https://eric-wieser.github.io/M40001_lean/tactic/replacer.html#tactic.unprime"><span class="name">tactic</span>.<span class="name">unprime</span></a></span>
+&nbsp;<span class="decl_args">:</span>
+<div class="decl_type"><span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/meta/name.html#name">name</a> → <span class="fn"><a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html#tactic">tactic</a> <a href="https://eric-wieser.github.io/M40001_lean/init/meta/name.html#name">name</a></span></span></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+    
+
+    
+        
+        
+<div class="decl" id="tactic.replaceable_attr">
+<div class="def meta">
+
+<div class="gh_link"><a href="https://github.com/leanprover-community/mathlib/blob/master/src/tactic/replacer.lean#L133">source</a></div>
+
+
+
+<div class="decl_header">
+    
+
+<span class="decl_meta">meta</span>
+<span class="decl_kind">def</span>
+<span class="decl_name"><a class="break_within" href="https://eric-wieser.github.io/M40001_lean/tactic/replacer.html#tactic.replaceable_attr"><span class="name">tactic</span>.<span class="name">replaceable_attr</span></a></span>
+&nbsp;<span class="decl_args">:</span>
+<div class="decl_type"><span class="fn"><span class="fn">(<a href="https://eric-wieser.github.io/M40001_lean/init/meta/attribute.html#user_attribute">user_attribute</a> <a href="https://eric-wieser.github.io/M40001_lean/init/core.html#unit">unit</a>)</span></span></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+    
+
+
+</main>
+
+<nav class="nav">
+    <h3>General documentation</h3>
+<div class="nav_link"><a href="https://eric-wieser.github.io/M40001_lean/">index</a></div>
+<div class="nav_link"><a href="https://eric-wieser.github.io/M40001_lean/tactics.html">tactics</a></div>
+<div class="nav_link"><a href="https://eric-wieser.github.io/M40001_lean/commands.html">commands</a></div>
+<div class="nav_link"><a href="https://eric-wieser.github.io/M40001_lean/hole_commands.html">hole commands</a></div>
+<div class="nav_link"><a href="https://eric-wieser.github.io/M40001_lean/attributes.html">attributes</a></div>
+<div class="nav_link"><a href="https://eric-wieser.github.io/M40001_lean/notes.html">notes</a></div>
+<div class="nav_link"><a href="https://eric-wieser.github.io/M40001_lean/references.html">references</a></div>
+
+<h3>Additional documentation</h3>
+
+
+<h3>Library</h3>
+        <h4>core</h4>
+        
+        <details class="nav_sect" data-path="data" >
+            <summary>data</summary>
+            
+        <details class="nav_sect" data-path="data/buffer" >
+            <summary>buffer</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/buffer/parser.html">parser</a>
+        </div>
+        </details>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/buffer.html">buffer</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/dlist.html">dlist</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/vector.html">vector</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init" >
+            <summary>init</summary>
+            
+        <details class="nav_sect" data-path="init/algebra" >
+            <summary>algebra</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/algebra/classes.html">classes</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/algebra/functions.html">functions</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/algebra/order.html">order</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/control" >
+            <summary>control</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/control/alternative.html">alternative</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/control/applicative.html">applicative</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/control/combinators.html">combinators</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/control/except.html">except</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/control/functor.html">functor</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/control/id.html">id</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/control/lawful.html">lawful</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/control/lift.html">lift</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/control/monad.html">monad</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/control/monad_fail.html">monad_fail</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/control/option.html">option</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/control/reader.html">reader</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/control/state.html">state</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/data" >
+            <summary>data</summary>
+            
+        <details class="nav_sect" data-path="init/data/array" >
+            <summary>array</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/array/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/array/slice.html">slice</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/data/bool" >
+            <summary>bool</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/bool/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/bool/lemmas.html">lemmas</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/data/char" >
+            <summary>char</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/char/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/char/classes.html">classes</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/char/lemmas.html">lemmas</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/data/fin" >
+            <summary>fin</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/fin/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/fin/ops.html">ops</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/data/int" >
+            <summary>int</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/int/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/int/bitwise.html">bitwise</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/int/comp_lemmas.html">comp_lemmas</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/int/order.html">order</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/data/list" >
+            <summary>list</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/list/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/list/instances.html">instances</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/list/lemmas.html">lemmas</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/list/qsort.html">qsort</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/data/nat" >
+            <summary>nat</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/nat/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/nat/bitwise.html">bitwise</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/nat/div.html">div</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/nat/gcd.html">gcd</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/nat/lemmas.html">lemmas</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/data/option" >
+            <summary>option</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/option/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/option/instances.html">instances</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/data/ordering" >
+            <summary>ordering</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/ordering/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/ordering/lemmas.html">lemmas</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/data/sigma" >
+            <summary>sigma</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/sigma/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/sigma/lex.html">lex</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/data/string" >
+            <summary>string</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/string/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/string/ops.html">ops</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/data/subtype" >
+            <summary>subtype</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/subtype/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/subtype/instances.html">instances</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/data/sum" >
+            <summary>sum</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/sum/basic.html">basic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/data/unsigned" >
+            <summary>unsigned</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/unsigned/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/unsigned/ops.html">ops</a>
+        </div>
+        </details>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/prod.html">prod</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/punit.html">punit</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/quot.html">quot</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/repr.html">repr</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/set.html">set</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/setoid.html">setoid</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/data/to_string.html">to_string</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/meta" >
+            <summary>meta</summary>
+            
+        <details class="nav_sect" data-path="init/meta/converter" >
+            <summary>converter</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/converter/conv.html">conv</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/converter/interactive.html">interactive</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/meta/lean" >
+            <summary>lean</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/lean/parser.html">parser</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/meta/smt" >
+            <summary>smt</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/smt/congruence_closure.html">congruence_closure</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/smt/ematch.html">ematch</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/smt/interactive.html">interactive</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/smt/rsimp.html">rsimp</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/smt/smt_tactic.html">smt_tactic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="init/meta/widget" >
+            <summary>widget</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/widget/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/widget/html_cmd.html">html_cmd</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/widget/interactive_expr.html">interactive_expr</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/widget/replace_save_info.html">replace_save_info</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/widget/tactic_component.html">tactic_component</a>
+        </div>
+        </details>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/ac_tactics.html">ac_tactics</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/async_tactic.html">async_tactic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/attribute.html">attribute</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/backward.html">backward</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/case_tag.html">case_tag</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/comp_value_tactics.html">comp_value_tactics</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/congr_lemma.html">congr_lemma</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/congr_tactic.html">congr_tactic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/constructor_tactic.html">constructor_tactic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/contradiction_tactic.html">contradiction_tactic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/declaration.html">declaration</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/derive.html">derive</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/environment.html">environment</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/exceptional.html">exceptional</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr.html">expr</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/expr_address.html">expr_address</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/float.html">float</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/format.html">format</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/fun_info.html">fun_info</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/has_reflect.html">has_reflect</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/hole_command.html">hole_command</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/injection_tactic.html">injection_tactic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/interaction_monad.html">interaction_monad</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/interactive.html">interactive</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/interactive_base.html">interactive_base</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/json.html">json</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/level.html">level</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/local_context.html">local_context</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/match_tactic.html">match_tactic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/mk_dec_eq_instance.html">mk_dec_eq_instance</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/mk_has_reflect_instance.html">mk_has_reflect_instance</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/mk_has_sizeof_instance.html">mk_has_sizeof_instance</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/mk_inhabited_instance.html">mk_inhabited_instance</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/module_info.html">module_info</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/name.html">name</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/occurrences.html">occurrences</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/options.html">options</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/pexpr.html">pexpr</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/rb_map.html">rb_map</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/rec_util.html">rec_util</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/ref.html">ref</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/relation_tactics.html">relation_tactics</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/rewrite_tactic.html">rewrite_tactic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/set_get_option_tactics.html">set_get_option_tactics</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/simp_tactic.html">simp_tactic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/tactic.html">tactic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/tagged_format.html">tagged_format</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/task.html">task</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/type_context.html">type_context</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/vm.html">vm</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/meta/well_founded_tactics.html">well_founded_tactics</a>
+        </div>
+        </details>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/cc_lemmas.html">cc_lemmas</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/classical.html">classical</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/coe.html">coe</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/core.html">core</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/default.html">default</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/function.html">function</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/funext.html">funext</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/ite_simp.html">ite_simp</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/logic.html">logic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/propext.html">propext</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/util.html">util</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/version.html">version</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/init/wf.html">wf</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="system" >
+            <summary>system</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/system/io.html">io</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/system/io_interface.html">io_interface</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/system/random.html">random</a>
+        </div>
+        </details>
+        <h4>lean_problem_sheets</h4>
+        
+        <details class="nav_sect" data-path="2019" >
+            <summary>2019</summary>
+            
+        <details class="nav_sect" data-path="2019/questions" >
+            <summary>questions</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2019/questions/sheet1.html">sheet1</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2019/questions/sheet2.html">sheet2</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2019/questions/sheet3.html">sheet3</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2019/questions/sheet4.html">sheet4</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="2019/solutions" >
+            <summary>solutions</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2019/solutions/sheet3.html">sheet3</a>
+        </div>
+        </details>
+        </details>
+        <details class="nav_sect" data-path="2020" >
+            <summary>2020</summary>
+            
+        <details class="nav_sect" data-path="2020/functions" >
+            <summary>functions</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/functions/bijection_game.html">bijection_game</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/functions/happy_animals.html">happy_animals</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/functions/two_sided_inverse.html">two_sided_inverse</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/functions/univ_product.html">univ_product</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="2020/integers" >
+            <summary>integers</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/integers/int_def_solns.html">int_def_solns</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="2020/logic" >
+            <summary>logic</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/logic/SAT_example.html">SAT_example</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/logic/bool_not.html">bool_not</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/logic/logic_lecture_ad_lib.html">logic_lecture_ad_lib</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/logic/logic_video.html">logic_video</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/logic/questions.html">questions</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/logic/solutions.html">solutions</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="2020/peano" >
+            <summary>peano</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/peano/peano_practice_questions.html">peano_practice_questions</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="2020/problem_sheets" >
+            <summary>problem_sheets</summary>
+            
+        <details class="nav_sect" data-path="2020/problem_sheets/Part_II" >
+            <summary>Part_II</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/problem_sheets/Part_II/sheet1_q3.html">sheet1_q3</a>
+        </div>
+        </details>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/problem_sheets/Part_II_sheet1.html">Part_II_sheet1</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="2020/relations" >
+            <summary>relations</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/relations/equiv_partition2.html">equiv_partition2</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/relations/partition_challenge.html">partition_challenge</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/relations/partition_challenge_official_solution.html">partition_challenge_official_solution</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/relations/partition_challenge_solution2.html">partition_challenge_solution2</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/relations/partition_challenge_xena.html">partition_challenge_xena</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/relations/random_reln_transitive2.html">random_reln_transitive2</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="2020/sets" >
+            <summary>sets</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/sets/canonical.html">canonical</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/sets/real_numbers.html">real_numbers</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="2020/tactic_hints" >
+            <summary>tactic_hints</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2020/tactic_hints/examples.html">examples</a>
+        </div>
+        </details>
+        </details>
+        <details class="nav_sect" data-path="2021" >
+            <summary>2021</summary>
+            
+        <details class="nav_sect" data-path="2021/functions" >
+            <summary>functions</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2021/functions/sheet1.html">sheet1</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="2021/logic" >
+            <summary>logic</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2021/logic/sheet1.html">sheet1</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2021/logic/sheet2.html">sheet2</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2021/logic/sheet3.html">sheet3</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2021/logic/sheet4.html">sheet4</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2021/logic/sheet5.html">sheet5</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2021/logic/sheet6.html">sheet6</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="2021/sets" >
+            <summary>sets</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2021/sets/sheet1.html">sheet1</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2021/sets/sheet2.html">sheet2</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2021/sets/sheet3.html">sheet3</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2021/sets/sheet4.html">sheet4</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2021/sets/sheet5.html">sheet5</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2021/sets/sheet6.html">sheet6</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/2021/sets/sheet7.html">sheet7</a>
+        </div>
+        </details>
+        </details>
+        <h4>mathlib</h4>
+        
+        <details class="nav_sect" data-path="algebra" >
+            <summary>algebra</summary>
+            
+        <details class="nav_sect" data-path="algebra/algebra" >
+            <summary>algebra</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/algebra/basic.html">basic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="algebra/big_operators" >
+            <summary>big_operators</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/big_operators/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/big_operators/option.html">option</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/big_operators/order.html">order</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/big_operators/pi.html">pi</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/big_operators/ring.html">ring</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="algebra/field" >
+            <summary>field</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/field/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/field/opposite.html">opposite</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="algebra/gcd_monoid" >
+            <summary>gcd_monoid</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/gcd_monoid/basic.html">basic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="algebra/group" >
+            <summary>group</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group/commute.html">commute</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group/conj.html">conj</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group/defs.html">defs</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group/hom.html">hom</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group/hom_instances.html">hom_instances</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group/inj_surj.html">inj_surj</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group/opposite.html">opposite</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group/pi.html">pi</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group/prod.html">prod</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group/semiconj.html">semiconj</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group/to_additive.html">to_additive</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group/type_tags.html">type_tags</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group/units.html">units</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group/units_hom.html">units_hom</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group/with_one.html">with_one</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="algebra/group_power" >
+            <summary>group_power</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group_power/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group_power/lemmas.html">lemmas</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group_power/order.html">order</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="algebra/group_with_zero" >
+            <summary>group_with_zero</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group_with_zero/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group_with_zero/defs.html">defs</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group_with_zero/power.html">power</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="algebra/module" >
+            <summary>module</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/module/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/module/hom.html">hom</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/module/linear_map.html">linear_map</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/module/pi.html">pi</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/module/prod.html">prod</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/module/submodule.html">submodule</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/module/submodule_lattice.html">submodule_lattice</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="algebra/order" >
+            <summary>order</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/order/absolute_value.html">absolute_value</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/order/archimedean.html">archimedean</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/order/field.html">field</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/order/floor.html">floor</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/order/group.html">group</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/order/monoid.html">monoid</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/order/monoid_lemmas.html">monoid_lemmas</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/order/nonneg.html">nonneg</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/order/ring.html">ring</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/order/sub.html">sub</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/order/with_zero.html">with_zero</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="algebra/regular" >
+            <summary>regular</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/regular/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/regular/smul.html">smul</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="algebra/ring" >
+            <summary>ring</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/ring/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/ring/comp_typeclasses.html">comp_typeclasses</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/ring/opposite.html">opposite</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/ring/pi.html">pi</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/ring/prod.html">prod</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="algebra/star" >
+            <summary>star</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/star/basic.html">basic</a>
+        </div>
+        </details>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/abs.html">abs</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/associated.html">associated</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/bounds.html">bounds</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/char_zero.html">char_zero</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/covariant_and_contravariant.html">covariant_and_contravariant</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/divisibility.html">divisibility</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/euclidean_domain.html">euclidean_domain</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/field_power.html">field_power</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/free_monoid.html">free_monoid</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group_action_hom.html">group_action_hom</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/group_ring_action.html">group_ring_action</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/indicator_function.html">indicator_function</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/invertible.html">invertible</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/opposites.html">opposites</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/pointwise.html">pointwise</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/punit_instances.html">punit_instances</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/quotient.html">quotient</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/smul_with_zero.html">smul_with_zero</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/algebra/support.html">support</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="category_theory" >
+            <summary>category_theory</summary>
+            
+        <details class="nav_sect" data-path="category_theory/category" >
+            <summary>category</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/category_theory/category/basic.html">basic</a>
+        </div>
+        </details>
+        </details>
+        <details class="nav_sect" data-path="combinatorics" >
+            <summary>combinatorics</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/combinatorics/quiver.html">quiver</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="control" >
+            <summary>control</summary>
+            
+        <details class="nav_sect" data-path="control/equiv_functor" >
+            <summary>equiv_functor</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/control/equiv_functor/instances.html">instances</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="control/monad" >
+            <summary>monad</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/control/monad/basic.html">basic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="control/traversable" >
+            <summary>traversable</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/control/traversable/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/control/traversable/derive.html">derive</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/control/traversable/equiv.html">equiv</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/control/traversable/lemmas.html">lemmas</a>
+        </div>
+        </details>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/control/applicative.html">applicative</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/control/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/control/bifunctor.html">bifunctor</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/control/equiv_functor.html">equiv_functor</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/control/functor.html">functor</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data" >
+            <summary>data</summary>
+            
+        <details class="nav_sect" data-path="data/array" >
+            <summary>array</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/array/lemmas.html">lemmas</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/bool" >
+            <summary>bool</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/bool/all_any.html">all_any</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/bool/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/bool/set.html">set</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/dlist" >
+            <summary>dlist</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/dlist/basic.html">basic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/equiv" >
+            <summary>equiv</summary>
+            
+        <details class="nav_sect" data-path="data/equiv/encodable" >
+            <summary>encodable</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/equiv/encodable/basic.html">basic</a>
+        </div>
+        </details>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/equiv/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/equiv/denumerable.html">denumerable</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/equiv/functor.html">functor</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/equiv/module.html">module</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/equiv/mul_add.html">mul_add</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/equiv/mul_add_aut.html">mul_add_aut</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/equiv/nat.html">nat</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/equiv/ring.html">ring</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/equiv/ring_aut.html">ring_aut</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/equiv/set.html">set</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/fin" >
+            <summary>fin</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/fin/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/fin/interval.html">interval</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/finset" >
+            <summary>finset</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/finset/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/finset/card.html">card</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/finset/fin.html">fin</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/finset/fold.html">fold</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/finset/lattice.html">lattice</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/finset/locally_finite.html">locally_finite</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/finset/option.html">option</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/finset/order.html">order</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/finset/pi.html">pi</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/finset/powerset.html">powerset</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/finset/preimage.html">preimage</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/finset/prod.html">prod</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/finset/sigma.html">sigma</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/finset/sort.html">sort</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/finsupp" >
+            <summary>finsupp</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/finsupp/basic.html">basic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/fintype" >
+            <summary>fintype</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/fintype/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/fintype/card.html">card</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/int" >
+            <summary>int</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/int/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/int/cast.html">cast</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/int/char_zero.html">char_zero</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/int/interval.html">interval</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/int/least_greatest.html">least_greatest</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/list" >
+            <summary>list</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/big_operators.html">big_operators</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/chain.html">chain</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/count.html">count</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/defs.html">defs</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/duplicate.html">duplicate</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/erase_dup.html">erase_dup</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/forall2.html">forall2</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/func.html">func</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/join.html">join</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/lattice.html">lattice</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/lex.html">lex</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/min_max.html">min_max</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/nodup.html">nodup</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/nodup_equiv_fin.html">nodup_equiv_fin</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/of_fn.html">of_fn</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/pairwise.html">pairwise</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/perm.html">perm</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/permutation.html">permutation</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/prod_monoid.html">prod_monoid</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/prod_sigma.html">prod_sigma</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/range.html">range</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/sort.html">sort</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/sublists.html">sublists</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/tfae.html">tfae</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/list/zip.html">zip</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/multiset" >
+            <summary>multiset</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/multiset/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/multiset/erase_dup.html">erase_dup</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/multiset/finset_ops.html">finset_ops</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/multiset/fold.html">fold</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/multiset/lattice.html">lattice</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/multiset/nodup.html">nodup</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/multiset/pi.html">pi</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/multiset/powerset.html">powerset</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/multiset/range.html">range</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/multiset/sort.html">sort</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/nat" >
+            <summary>nat</summary>
+            
+        <details class="nav_sect" data-path="data/nat/choose" >
+            <summary>choose</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/nat/choose/basic.html">basic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/nat/factorial" >
+            <summary>factorial</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/nat/factorial/basic.html">basic</a>
+        </div>
+        </details>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/nat/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/nat/cast.html">cast</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/nat/enat.html">enat</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/nat/gcd.html">gcd</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/nat/interval.html">interval</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/nat/lattice.html">lattice</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/nat/pairing.html">pairing</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/nat/pow.html">pow</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/nat/sqrt.html">sqrt</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/num" >
+            <summary>num</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/num/basic.html">basic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/option" >
+            <summary>option</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/option/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/option/defs.html">defs</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/pnat" >
+            <summary>pnat</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/pnat/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/pnat/interval.html">interval</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/rat" >
+            <summary>rat</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/rat/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/rat/cast.html">cast</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/rat/floor.html">floor</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/rat/meta_defs.html">meta_defs</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/rat/order.html">order</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/rbmap" >
+            <summary>rbmap</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/rbmap/basic.html">basic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/rbtree" >
+            <summary>rbtree</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/rbtree/default_lt.html">default_lt</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/rbtree/init.html">init</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/real" >
+            <summary>real</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/real/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/real/cau_seq.html">cau_seq</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/real/cau_seq_completion.html">cau_seq_completion</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/real/ennreal.html">ennreal</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/real/nnreal.html">nnreal</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/set" >
+            <summary>set</summary>
+            
+        <details class="nav_sect" data-path="data/set/intervals" >
+            <summary>intervals</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/set/intervals/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/set/intervals/image_preimage.html">image_preimage</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/set/intervals/ord_connected.html">ord_connected</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/set/intervals/unordered_interval.html">unordered_interval</a>
+        </div>
+        </details>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/set/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/set/finite.html">finite</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/set/function.html">function</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/set/lattice.html">lattice</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/set/pairwise.html">pairwise</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/set/prod.html">prod</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/set_like" >
+            <summary>set_like</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/set_like/basic.html">basic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/setoid" >
+            <summary>setoid</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/setoid/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/setoid/partition.html">partition</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/sigma" >
+            <summary>sigma</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/sigma/basic.html">basic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/string" >
+            <summary>string</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/string/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/string/defs.html">defs</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/sym" >
+            <summary>sym</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/sym/basic.html">basic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="data/vector" >
+            <summary>vector</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/vector/basic.html">basic</a>
+        </div>
+        </details>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/char.html">char</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/dfinsupp.html">dfinsupp</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/fun_like.html">fun_like</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/mllist.html">mllist</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/opposite.html">opposite</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/part.html">part</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/pi.html">pi</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/pprod.html">pprod</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/prod.html">prod</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/quot.html">quot</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/subtype.html">subtype</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/sum.html">sum</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/tree.html">tree</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/data/ulift.html">ulift</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="group_theory" >
+            <summary>group_theory</summary>
+            
+        <details class="nav_sect" data-path="group_theory/group_action" >
+            <summary>group_action</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/group_action/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/group_action/defs.html">defs</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/group_action/group.html">group</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/group_action/opposite.html">opposite</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/group_action/pi.html">pi</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/group_action/prod.html">prod</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/group_action/sub_mul_action.html">sub_mul_action</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/group_action/units.html">units</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="group_theory/perm" >
+            <summary>perm</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/perm/basic.html">basic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="group_theory/subgroup" >
+            <summary>subgroup</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/subgroup/basic.html">basic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="group_theory/submonoid" >
+            <summary>submonoid</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/submonoid/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/submonoid/center.html">center</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/submonoid/membership.html">membership</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/submonoid/operations.html">operations</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/submonoid/pointwise.html">pointwise</a>
+        </div>
+        </details>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/congruence.html">congruence</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/coset.html">coset</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/group_theory/quotient_group.html">quotient_group</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="linear_algebra" >
+            <summary>linear_algebra</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/linear_algebra/basic.html">basic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="logic" >
+            <summary>logic</summary>
+            
+        <details class="nav_sect" data-path="logic/function" >
+            <summary>function</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/logic/function/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/logic/function/conjugate.html">conjugate</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/logic/function/iterate.html">iterate</a>
+        </div>
+        </details>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/logic/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/logic/embedding.html">embedding</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/logic/is_empty.html">is_empty</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/logic/nonempty.html">nonempty</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/logic/nontrivial.html">nontrivial</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/logic/relation.html">relation</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/logic/relator.html">relator</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/logic/unique.html">unique</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="meta" >
+            <summary>meta</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/meta/expr.html">expr</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/meta/expr_lens.html">expr_lens</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/meta/rb_map.html">rb_map</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="order" >
+            <summary>order</summary>
+            
+        <details class="nav_sect" data-path="order/hom" >
+            <summary>hom</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/hom/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/hom/lattice.html">lattice</a>
+        </div>
+        </details>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/atoms.html">atoms</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/boolean_algebra.html">boolean_algebra</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/bounded_order.html">bounded_order</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/bounds.html">bounds</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/compactly_generated.html">compactly_generated</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/compare.html">compare</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/complete_boolean_algebra.html">complete_boolean_algebra</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/complete_lattice.html">complete_lattice</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/conditionally_complete_lattice.html">conditionally_complete_lattice</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/cover.html">cover</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/directed.html">directed</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/galois_connection.html">galois_connection</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/lattice.html">lattice</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/lattice_intervals.html">lattice_intervals</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/lexicographic.html">lexicographic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/locally_finite.html">locally_finite</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/min_max.html">min_max</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/modular_lattice.html">modular_lattice</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/monotone.html">monotone</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/omega_complete_partial_order.html">omega_complete_partial_order</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/order_dual.html">order_dual</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/order_iso_nat.html">order_iso_nat</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/rel_classes.html">rel_classes</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/rel_iso.html">rel_iso</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/well_founded.html">well_founded</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/order/zorn.html">zorn</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="ring_theory" >
+            <summary>ring_theory</summary>
+            
+        <details class="nav_sect" data-path="ring_theory/subring" >
+            <summary>subring</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/ring_theory/subring/basic.html">basic</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="ring_theory/subsemiring" >
+            <summary>subsemiring</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/ring_theory/subsemiring/basic.html">basic</a>
+        </div>
+        </details>
+        </details>
+        <details class="nav_sect" data-path="tactic" open>
+            <summary>tactic</summary>
+            
+        <details class="nav_sect" data-path="tactic/converter" >
+            <summary>converter</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/converter/apply_congr.html">apply_congr</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/converter/interactive.html">interactive</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/converter/old_conv.html">old_conv</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="tactic/linarith" >
+            <summary>linarith</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/linarith/datatypes.html">datatypes</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/linarith/elimination.html">elimination</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/linarith/frontend.html">frontend</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/linarith/lemmas.html">lemmas</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/linarith/parsing.html">parsing</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/linarith/preprocessing.html">preprocessing</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/linarith/verification.html">verification</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="tactic/lint" >
+            <summary>lint</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/lint/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/lint/default.html">default</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/lint/frontend.html">frontend</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/lint/misc.html">misc</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/lint/simp.html">simp</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/lint/type_classes.html">type_classes</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="tactic/monotonicity" >
+            <summary>monotonicity</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/monotonicity/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/monotonicity/interactive.html">interactive</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/monotonicity/lemmas.html">lemmas</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="tactic/nth_rewrite" >
+            <summary>nth_rewrite</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/nth_rewrite/basic.html">basic</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/nth_rewrite/congr.html">congr</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/nth_rewrite/default.html">default</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="tactic/omega" >
+            <summary>omega</summary>
+            
+        <details class="nav_sect" data-path="tactic/omega/int" >
+            <summary>int</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/int/dnf.html">dnf</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/int/form.html">form</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/int/main.html">main</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/int/preterm.html">preterm</a>
+        </div>
+        </details>
+        <details class="nav_sect" data-path="tactic/omega/nat" >
+            <summary>nat</summary>
+            
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/nat/dnf.html">dnf</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/nat/form.html">form</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/nat/main.html">main</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/nat/neg_elim.html">neg_elim</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/nat/preterm.html">preterm</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/nat/sub_elim.html">sub_elim</a>
+        </div>
+        </details>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/clause.html">clause</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/coeffs.html">coeffs</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/eq_elim.html">eq_elim</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/find_ees.html">find_ees</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/find_scalars.html">find_scalars</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/lin_comb.html">lin_comb</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/main.html">main</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/misc.html">misc</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/prove_unsats.html">prove_unsats</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/omega/term.html">term</a>
+        </div>
+        </details>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/abel.html">abel</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/algebra.html">algebra</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/alias.html">alias</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/apply.html">apply</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/apply_fun.html">apply_fun</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/auto_cases.html">auto_cases</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/binder_matching.html">binder_matching</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/by_contra.html">by_contra</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/cache.html">cache</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/cancel_denoms.html">cancel_denoms</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/chain.html">chain</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/choose.html">choose</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/clear.html">clear</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/congr.html">congr</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/core.html">core</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/dec_trivial.html">dec_trivial</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/delta_instance.html">delta_instance</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/dependencies.html">dependencies</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/derive_fintype.html">derive_fintype</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/derive_inhabited.html">derive_inhabited</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/doc_commands.html">doc_commands</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/elide.html">elide</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/equiv_rw.html">equiv_rw</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/explode.html">explode</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/ext.html">ext</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/field_simp.html">field_simp</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/fin_cases.html">fin_cases</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/find.html">find</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/finish.html">finish</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/fix_reflect_string.html">fix_reflect_string</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/generalize_proofs.html">generalize_proofs</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/generalizes.html">generalizes</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/group.html">group</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/hint.html">hint</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/interactive.html">interactive</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/interactive_expr.html">interactive_expr</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/interval_cases.html">interval_cases</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/itauto.html">itauto</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/lean_core_docs.html">lean_core_docs</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/lift.html">lift</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/localized.html">localized</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/mk_iff_of_inductive_prop.html">mk_iff_of_inductive_prop</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/noncomm_ring.html">noncomm_ring</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/norm_cast.html">norm_cast</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/norm_num.html">norm_num</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/obviously.html">obviously</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/pi_instances.html">pi_instances</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/pretty_cases.html">pretty_cases</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/project_dir.html">project_dir</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/protected.html">protected</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/push_neg.html">push_neg</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/rcases.html">rcases</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/reassoc_axiom.html">reassoc_axiom</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/rename_var.html">rename_var</a>
+        </div>
+        <div class="nav_link visible">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/replacer.html">replacer</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/reserved_notation.html">reserved_notation</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/restate_axiom.html">restate_axiom</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/rewrite.html">rewrite</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/ring.html">ring</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/ring_exp.html">ring_exp</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/scc.html">scc</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/show_term.html">show_term</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/simp_command.html">simp_command</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/simp_result.html">simp_result</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/simp_rw.html">simp_rw</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/simpa.html">simpa</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/simps.html">simps</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/slice.html">slice</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/solve_by_elim.html">solve_by_elim</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/split_ifs.html">split_ifs</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/squeeze.html">squeeze</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/subtype_instance.html">subtype_instance</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/suggest.html">suggest</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/tauto.html">tauto</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/tfae.html">tfae</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/tidy.html">tidy</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/transform_decl.html">transform_decl</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/transport.html">transport</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/trunc_cases.html">trunc_cases</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/unfold_cases.html">unfold_cases</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/unify_equations.html">unify_equations</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/where.html">where</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/wlog.html">wlog</a>
+        </div>
+        <div class="nav_link ">
+            <a href="https://eric-wieser.github.io/M40001_lean/tactic/zify.html">zify</a>
+        </div>
+        </details>
+</nav>
+
+
+<script>
+MathJax = {
+    tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [['$$', '$$']]
+    },
+    options: {
+        skipHtmlTags: [
+            'script', 'noscript', 'style', 'textarea', 'pre',
+            'code', 'annotation', 'annotation-xml',
+            'decl', 'decl_meta', 'attributes', 'decl_args', 'decl_header', 'decl_name',
+            'decl_type', 'equation', 'equations', 'structure_field', 'structure_fields',
+            'constructor', 'constructors', 'instances'
+        ],
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process',
+    },
+};
+
+siteRoot = "https://eric-wieser.github.io/M40001_lean/";
+</script>
+<script src="https://eric-wieser.github.io/M40001_lean/add_commit.js"></script>
+<script src="https://eric-wieser.github.io/M40001_lean/nav.js"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</body>
+</html>
